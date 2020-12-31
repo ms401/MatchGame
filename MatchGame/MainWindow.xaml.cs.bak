@@ -12,11 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace MatchGame
 {
-    using System.Windows.Threading;
-
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -29,7 +28,6 @@ namespace MatchGame
         public MainWindow()
         {
             InitializeComponent();
-
             timer.Interval = TimeSpan.FromSeconds(.1);
             timer.Tick += Timer_Tick;
             SetUpGame();
@@ -43,6 +41,11 @@ namespace MatchGame
             {
                 timer.Stop();
                 timeTextBlock.Text = timeTextBlock.Text + " - Play again?";
+
+                InitializeComponent();
+                timer.Interval = TimeSpan.FromSeconds(.1);
+                timer.Tick += Timer_Tick;
+                SetUpGame();
             }
         }
 
@@ -50,7 +53,7 @@ namespace MatchGame
         {
             List<string> animalEmoji = new List<string>()
             {
-                "🐙", "🐙",
+               "🐙", "🐙",
                 "🐡", "🐡",
                 "🐘", "🐘",
                 "🐳", "🐳",
@@ -59,9 +62,7 @@ namespace MatchGame
                 "🦘", "🦘",
                 "🦔", "🦔",
             };
-
             Random random = new Random();
-
             foreach (TextBlock textBlock in mainGrid.Children.OfType<TextBlock>())
             {
                 if (textBlock.Name != "timeTextBlock")
@@ -73,7 +74,6 @@ namespace MatchGame
                     animalEmoji.RemoveAt(index);
                 }
             }
-
             timer.Start();
             tenthsOfSecondsElapsed = 0;
             matchesFound = 0;
